@@ -1,0 +1,13 @@
+services:
+  proxy:
+    build:
+      context: ./proxy
+    ports:
+      - "8888:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    restart: unless-stopped

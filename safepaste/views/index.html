@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafePaste</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+    nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 16px 24px; }
+    nav a { color: #58a6ff; text-decoration: none; font-size: 1.4rem; font-weight: 600; }
+    .container { max-width: 720px; margin: 40px auto; padding: 0 20px; }
+    h2 { margin-bottom: 16px; color: #f0f6fc; }
+    form { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 24px; margin-bottom: 32px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; }
+    textarea, input[type="text"] {
+      width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d;
+      border-radius: 6px; color: #c9d1d9; font-family: monospace; font-size: 14px; resize: vertical;
+    }
+    textarea { min-height: 160px; }
+    button {
+      margin-top: 12px; padding: 10px 20px; background: #238636; color: #fff;
+      border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+    }
+    button:hover { background: #2ea043; }
+    .section-title { font-size: 0.85rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <nav><a href="/">🔒 SafePaste</a></nav>
+  <div class="container">
+    <h2>Create a Paste</h2>
+    <form action="/create" method="POST">
+      <label for="content">Paste Content (HTML allowed, sanitized for safety)</label>
+      <textarea name="content" id="content" placeholder="Enter your content here..."></textarea>
+      <button type="submit">Create Paste</button>
+    </form>
+
+    <p class="section-title">Report a paste to admin</p>
+    <form action="/report" method="POST">
+      <label for="url">Paste URL</label>
+      <input type="text" name="url" id="url" placeholder="http://localhost:3000/paste/abc123">
+      <button type="submit">Report</button>
+    </form>
+  </div>
+</body>
+</html>

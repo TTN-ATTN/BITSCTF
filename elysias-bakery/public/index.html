@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #0f0f0f;
+        color: #e0e0e0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 540px;
+        width: 100%;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #fff;
+      }
+      .card {
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid #333;
+        border-radius: 6px;
+        background: #111;
+        color: #e0e0e0;
+        font-size: 0.9rem;
+        outline: none;
+      }
+      input:focus,
+      textarea:focus {
+        border-color: #5865f2;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+        font-family: inherit;
+      }
+      label {
+        display: block;
+        font-size: 0.8rem;
+        color: #888;
+        margin-bottom: 0.3rem;
+      }
+      .field {
+        margin-bottom: 0.75rem;
+      }
+      button {
+        padding: 0.55rem 1rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .btn-primary {
+        background: #5865f2;
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #4752c4;
+      }
+      .btn-danger {
+        background: #ed4245;
+        color: #fff;
+      }
+      .btn-danger:hover {
+        background: #c03537;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: #888;
+        border: 1px solid #333;
+      }
+      .btn-ghost:hover {
+        color: #fff;
+        border-color: #555;
+      }
+      .btn-sm {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.78rem;
+      }
+      .row {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .toast {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.65rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #fff;
+        z-index: 100;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .toast.show {
+        opacity: 1;
+      }
+      .toast.ok {
+        background: #248045;
+      }
+      .toast.err {
+        background: #ed4245;
+      }
+      .note-item {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: #111;
+        border: 1px solid #2a2a2a;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+      }
+      .note-content {
+        flex: 1;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      .note-id {
+        font-size: 0.7rem;
+        color: #555;
+        margin-bottom: 0.25rem;
+        font-family: monospace;
+      }
+      #auth-section,
+      #app-section {
+        display: none;
+      }
+      .tabs {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+      }
+      .tab {
+        padding: 0.4rem 0.85rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.82rem;
+        background: transparent;
+        color: #888;
+        border: none;
+      }
+      .tab.active {
+        background: #5865f2;
+        color: #fff;
+      }
+      .divider {
+        height: 1px;
+        background: #2a2a2a;
+        margin: 1rem 0;
+      }
+      .empty {
+        text-align: center;
+        color: #555;
+        font-size: 0.85rem;
+        padding: 2rem 0;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .user-info {
+        font-size: 0.8rem;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Auth -->
+      <div id="auth-section">
+        <h1>Notes</h1>
+        <div class="tabs">
+          <button class="tab active" onclick="showTab('login')">Login</button>
+          <button class="tab" onclick="showTab('signup')">Sign Up</button>
+        </div>
+
+        <div class="card" id="login-tab">
+          <div class="field"><label>Username</label><input id="l-user" /></div>
+          <div class="field">
+            <label>Password</label><input id="l-pass" type="password" />
+          </div>
+          <button class="btn-primary" onclick="login()">Login</button>
+        </div>
+
+        <div class="card" id="signup-tab" style="display: none">
+          <div class="field">
+            <label>Username (min 6 chars)</label><input id="s-user" />
+          </div>
+          <div class="field">
+            <label>Password</label><input id="s-pass" type="password" />
+          </div>
+          <button class="btn-primary" onclick="signup()">Sign Up</button>
+        </div>
+      </div>
+
+      <!-- App -->
+      <div id="app-section">
+        <div class="header">
+          <h1>My Notes</h1>
+          <div class="row">
+            <span class="user-info" id="greeting"></span>
+            <button class="btn-ghost btn-sm" onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="field">
+            <label>New Note</label
+            ><textarea
+              id="note-input"
+              placeholder="Write something…"
+            ></textarea>
+          </div>
+          <button class="btn-primary" onclick="createNote()">Save Note</button>
+        </div>
+
+        <div id="notes-list"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      const API = "";
+
+      // ── Toast ─────────────────────────────────
+      function toast(msg, ok = true) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.className = "toast show " + (ok ? "ok" : "err");
+        setTimeout(() => el.classList.remove("show"), 2500);
+      }
+
+      // ── Tabs ──────────────────────────────────
+      function showTab(name) {
+        document.getElementById("login-tab").style.display =
+          name === "login" ? "" : "none";
+        document.getElementById("signup-tab").style.display =
+          name === "signup" ? "" : "none";
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelector(`.tab:${name === "login" ? "first" : "last"}-child`)
+          .classList.add("active");
+      }
+
+      // ── Auth ──────────────────────────────────
+      let currentUser = null;
+
+      async function login() {
+        const username = document.getElementById("l-user").value.trim();
+        const password = document.getElementById("l-pass").value;
+        if (!username || !password) return toast("Fill in all fields", false);
+
+        const res = await fetch(API + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, password }),
+        });
+        if (!res.ok) return toast(await res.text(), false);
+        currentUser = username;
+        enterApp();
+      }
+
+      async function signup() {
+        const username = document.getElementById("s-user").value.trim();
+        const password = document.getElementById("s-pass").value;
+        if (!username || !password) return toast("Fill in all fields", false);
+
+        const res = await fetch(API + "/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, password }),
+        });
+        if (!res.ok) return toast(await res.text(), false);
+        toast("Account created — logging in…");
+        document.getElementById("l-user").value = username;
+        document.getElementById("l-pass").value = password;
+        await login();
+      }
+
+      async function logout() {
+        await fetch(API + "/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+        currentUser = null;
+        document.getElementById("auth-section").style.display = "block";
+        document.getElementById("app-section").style.display = "none";
+      }
+
+      function enterApp() {
+        document.getElementById("auth-section").style.display = "none";
+        document.getElementById("app-section").style.display = "block";
+        document.getElementById("greeting").textContent = currentUser;
+        loadNotes();
+      }
+
+      // ── Notes ─────────────────────────────────
+      async function createNote() {
+        const input = document.getElementById("note-input");
+        const content = input.value.trim();
+        if (!content) return toast("Note cannot be empty", false);
+
+        const res = await fetch(API + "/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ content }),
+        });
+        if (!res.ok) return toast("Failed to create note", false);
+        input.value = "";
+        toast("Note saved");
+        loadNotes();
+      }
+
+      async function loadNotes() {
+        const res = await fetch(API + "/notes", { credentials: "include" });
+        if (!res.ok) return;
+        const { notes } = await res.json();
+
+        const list = document.getElementById("notes-list");
+        if (!notes.length) {
+          list.innerHTML = '<div class="empty">No notes yet</div>';
+          return;
+        }
+
+        // Fetch all note contents in parallel
+        const fetched = await Promise.all(
+          notes.map((id) =>
+            fetch(API + "/notes/" + id, { credentials: "include" }).then((r) =>
+              r.ok ? r.json() : null,
+            ),
+          ),
+        );
+
+        list.innerHTML = fetched
+          .filter(Boolean)
+          .map(
+            (n) => `
+          <div class="note-item">
+            <div style="flex:1">
+              <div class="note-id">${n.noteId}</div>
+              <div class="note-content">${escapeHtml(n.content)}</div>
+            </div>
+            <button class="btn-danger btn-sm" onclick="deleteNote('${n.noteId}')">Delete</button>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      async function deleteNote(id) {
+        const res = await fetch(API + "/notes/" + id, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        if (!res.ok) return toast("Failed to delete", false);
+        toast("Note deleted");
+        loadNotes();
+      }
+
+      function escapeHtml(s) {
+        const d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      // ── Init ──────────────────────────────────
+      // Try fetching notes to check if already logged in
+      (async () => {
+        const res = await fetch(API + "/notes", { credentials: "include" });
+        if (res.ok) {
+          currentUser = "(session)";
+          enterApp();
+        } else {
+          document.getElementById("auth-section").style.display = "block";
+        }
+      })();
+    </script>
+  </body>
+</html>

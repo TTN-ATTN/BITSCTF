@@ -1,0 +1,10 @@
+services:
+  safepaste:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - APP_HOST=localhost
+      - APP_PORT=3000
+      - FLAG=BITSCTF{fake_flag}
+      - ADMIN_SECRET=fake_admin_secret
