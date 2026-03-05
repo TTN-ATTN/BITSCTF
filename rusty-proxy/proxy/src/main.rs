@@ -215,6 +215,7 @@ async fn parse_request(
 }
 fn is_path_allowed(path: &str) -> bool {
     let normalized = path.to_lowercase();
+    // url-encoded bypass
     if normalized.starts_with("/admin") {
         return false;
     }
@@ -318,7 +319,8 @@ async fn forward_body(
                         break;
                     }
                     
-                    
+                    // VULNERABILITY: If the line doesn't contain a colon, 
+                    // it skips this check and writes the raw line to the backend
                     if let Some(cp) = trailer.find(':') {
                         let tname = &trailer[..cp];
                         if !is_valid_token(tname) {

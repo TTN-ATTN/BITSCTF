@@ -32,7 +32,7 @@ function noteFilePath(noteId: string): string {
 
 function getSessionUser(session: any): string | null {
   if (!session.value) return null;
-  return typeof session.value === "string" ? session.value : null;
+  return typeof session.value === "string" ? session.value : null; // no signature validation
 }
 
 function getSessionData(
@@ -114,7 +114,7 @@ const app = new Elysia({
       const noteId = generateNoteId();
       const filePath = noteFilePath(noteId);
 
-      await Bun.write(filePath, body.content);
+      await Bun.write(filePath, body.content); // file write
 
       const userNotes = notes.get(username) ?? [];
       userNotes.push(noteId);

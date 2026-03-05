@@ -52,9 +52,27 @@ app.get("/paste/:id", (req, res) => {
     return res.status(404).send("Paste not found");
   }
 
-  const html = pasteTemplate.replace("{paste}", content);
-  res.type("html").send(html);
+  const html = pasteTemplate.replace("{paste}", content); // mutation XSS using replace to bypass DOMPurify
+  // payload: '<img src="abc$`<img src=x onerror=alert(1)>">'
+  res.type("html").send(html); // inject payload before sending to browser
 });
+
+/* <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafePaste - View Paste</title>
+</head>
+<body>
+  <nav><a href="/">🔒 SafePaste</a></nav>
+  <div class="paste-container">
+    <img src="/logo.png" alt="SafePaste">
+    <div class="content">{paste}</div>
+  </div>
+</body>
+</html>
+*/
 
 app.post("/report", async (req, res) => {
   const url = req.body.url;
